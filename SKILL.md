@@ -2,13 +2,13 @@
 name: prompt-optimizer
 description: Optimizes prompts through an iterative Claude-GPT review process. Use when the user wants to optimize, improve, or refine a prompt. Supports automated review via Codex plugin or manual GPT handoff.
 metadata:
-  version: 1.0.0
+  version: 1.0.1
   author: Yori Lavi
 ---
 
 # Prompt Optimization Skill
 
-> **v1.0.0** · by Yori Lavi · updated 2026-05-29 · see [CHANGELOG](./CHANGELOG.md)
+> **v1.0.1** · by Yori Lavi · updated 2026-05-29 · see [CHANGELOG](./CHANGELOG.md)
 > Requires: Claude Code · Optional: [Codex CLI](https://github.com/openai/codex) for automated GPT review
 
 This skill guides an iterative prompt optimization process using both Claude and GPT as reviewers. When the Codex plugin is available, the GPT review step runs automatically — no manual copy-paste needed.

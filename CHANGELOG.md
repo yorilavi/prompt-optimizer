@@ -4,7 +4,9 @@ All notable changes to the `prompt-optimizer` skill.
 Versioning follows [Semantic Versioning](https://semver.org/):
 **MAJOR** = breaking workflow change · **MINOR** = new capability · **PATCH** = fix or clarification.
 
-## Unreleased
+## 1.0.1 — 2026-05-29
+
+Tooling-only patch release. The skill's behavior is unchanged — only the install ergonomics differ. No need to re-clone unless you want the smarter installer.
 
 ### Changed
 - `install.sh` and `install.ps1` are now three-mode installers: local-copy (run from an unzipped folder), update (re-run on an existing git checkout — does `git pull`), or fresh clone (works under `curl | sh` / `iwr | iex`).

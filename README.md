@@ -139,6 +139,6 @@ See [CHANGELOG.md](./CHANGELOG.md) for the version history.
 
 ## Author
 
-**Yori Lavi** · current version: **v1.0.0**
+**Yori Lavi** · current version: **v1.0.1**
 
 Issues and suggestions: open one on the [repo](https://github.com/yorilavi/prompt-optimizer/issues), or DM me directly if you got this skill from me.
