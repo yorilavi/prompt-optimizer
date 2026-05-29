@@ -4,6 +4,18 @@ All notable changes to the `prompt-optimizer` skill.
 Versioning follows [Semantic Versioning](https://semver.org/):
 **MAJOR** = breaking workflow change · **MINOR** = new capability · **PATCH** = fix or clarification.
 
+## Unreleased
+
+### Changed
+- `install.sh` and `install.ps1` are now three-mode installers: local-copy (run from an unzipped folder), update (re-run on an existing git checkout — does `git pull`), or fresh clone (works under `curl | sh` / `iwr | iex`).
+- Re-running the install script is now the canonical update path.
+- Remote one-liner installs supported via `curl ... | sh` and `iwr ... | iex`.
+- Scripts refuse to touch an existing git checkout that has a non-matching `origin` remote, instead of silently overwriting.
+
+### Added
+- INSTALL.md table explaining how the install script chooses a mode.
+- Troubleshooting entries for missing `git`, unfamiliar-remote refusal, and the "ran from inside the target" no-op.
+
 ## 1.0.0 — 2026-05-29
 
 ### Added

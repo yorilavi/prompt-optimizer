@@ -13,7 +13,7 @@ A skill for Claude Code that runs an iterative Claude ↔ GPT review loop on any
 
 ## Quick install (recommended)
 
-Unzip the archive, then from inside the unzipped folder:
+The install script handles three situations in one command. You don't have to know which one applies — it figures it out from what's on disk.
 
 **macOS / Linux / WSL / Git Bash on Windows:**
 
@@ -27,13 +27,30 @@ sh install.sh
 powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
-Both scripts:
+**One-line remote install** (pipes the script directly from GitHub — convenient but a trust call; read it first if you'd rather):
 
-1. Copy `SKILL.md` and `CHANGELOG.md` to the Claude Code skills directory.
-2. Back up any previous install to `<target>.bak.<timestamp>` instead of overwriting.
-3. Print the installed version and next steps.
+```sh
+curl -fsSL https://raw.githubusercontent.com/yorilavi/prompt-optimizer/main/install.sh | sh
+```
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/yorilavi/prompt-optimizer/main/install.ps1 | iex
+```
 
 Skip to [Verify the install](#verify-the-install) once you've run one.
+
+### How the script decides what to do
+
+| Situation | What runs |
+|---|---|
+| Script sits next to a `SKILL.md` (you unzipped the archive) | **Local copy** — copies `SKILL.md` + `CHANGELOG.md` to the target. |
+| `~/.claude/skills/prompt-optimizer/.git` exists with the right remote | **Update** — runs `git pull --ff-only` in place. |
+| Neither of the above (forwarded script, `curl | sh`, fresh machine) | **Clone** — `git clone --depth 1` from GitHub into the target. |
+| `~/.claude/skills/prompt-optimizer/.git` exists but the remote is something else | **Refuses.** Won't touch a checkout it doesn't recognize. Move it aside and re-run. |
+
+Any pre-existing non-git install at the target is backed up to `prompt-optimizer.bak.<unix-timestamp>` before being replaced — no silent overwrites.
+
+Re-running the script is the canonical way to update. You don't need to remember which mode you used the first time.
 
 ---
 
@@ -107,7 +124,13 @@ Expected if you don't have Codex installed. The skill falls back to manual mode 
 Safe to ignore. The `metadata:` block holds version and author info; VS Code's skill linter only flags top-level fields it doesn't recognize.
 
 **I ran the install script but nothing changed.**
-The script no-ops if you ran it from inside `~/.claude/skills/prompt-optimizer/` itself (the author's dev case). Run it from your `Downloads/` folder or wherever you unzipped the archive.
+The script no-ops if you ran it from inside `~/.claude/skills/prompt-optimizer/` itself (the author's dev case). It prints a hint to use `git pull` there instead. Run the script from `Downloads/` or anywhere outside the target if you want it to install or update for you.
+
+**The script says "git is required but was not found on PATH."**
+Two of the three install paths (clone, update) need git. Install it from <https://git-scm.com/downloads>, then re-run. The local-copy path (running the script from an unzipped folder that contains `SKILL.md`) doesn't need git.
+
+**The script refuses with "existing git checkout has an unfamiliar remote."**
+Something at `~/.claude/skills/prompt-optimizer/` is a git checkout, but its `origin` doesn't point at `yorilavi/prompt-optimizer`. The script won't touch it. Either move that directory aside and re-run, or `cd` into it and fix the remote yourself.
 
 ---
 

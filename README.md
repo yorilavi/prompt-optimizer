@@ -44,23 +44,42 @@ The trap to avoid: optimizing the prompt to the rubric. The rubric is not ground
 
 ## Install
 
-One-liner — clones the repo straight into Claude Code's skills directory.
+Pick whichever path fits how you got here.
 
-**macOS / Linux / WSL / Git Bash on Windows:**
+**1. Direct `git clone` — the recommended path.** Same command works as install and as update (just `git pull` later).
 
 ```sh
+# macOS / Linux / WSL / Git Bash on Windows
 git clone https://github.com/yorilavi/prompt-optimizer.git ~/.claude/skills/prompt-optimizer
 ```
 
-**Windows PowerShell:**
+```powershell
+# Windows PowerShell
+git clone https://github.com/yorilavi/prompt-optimizer.git "$env:USERPROFILE\.claude\skills\prompt-optimizer"
+```
+
+**2. Install script — single entry point for install, fresh clone, or update.** Auto-detects which mode is right based on what's already on disk. Works from an unzipped folder, from a forwarded copy of the script alone, or from a previous install.
+
+```sh
+sh install.sh                                                # macOS / Linux / WSL / Git Bash
+powershell -ExecutionPolicy Bypass -File .\install.ps1       # Windows
+```
+
+**3. One-line remote install** — pipes the script straight from GitHub. Convenient, but `curl | sh` is a trust call you should make consciously; read the script first if you're unsure.
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/yorilavi/prompt-optimizer/main/install.sh | sh
+```
 
 ```powershell
-git clone https://github.com/yorilavi/prompt-optimizer.git "$env:USERPROFILE\.claude\skills\prompt-optimizer"
+iwr -useb https://raw.githubusercontent.com/yorilavi/prompt-optimizer/main/install.ps1 | iex
 ```
 
 Restart Claude Code. Verify it loaded with `/skills` — you should see `prompt-optimizer` in the list.
 
-Detailed install (including manual copy, troubleshooting, uninstall): see [INSTALL.md](./INSTALL.md).
+**Updating later:** re-run `install.sh` (it'll detect the existing checkout and `git pull`), or `cd ~/.claude/skills/prompt-optimizer && git pull` directly.
+
+Detailed install + troubleshooting + uninstall: see [INSTALL.md](./INSTALL.md).
 
 ## Usage
 
@@ -101,6 +120,14 @@ If even one signal says "keep going," keep going. The right framing isn't "is th
 - **Optional: [Codex CLI](https://github.com/openai/codex)** — enables automated GPT review. Without it, the skill falls back to a manual copy-paste handoff with ChatGPT. You don't need Codex to use the skill.
 
 ## Updates
+
+Either re-run the install script (it'll detect the existing checkout and pull):
+
+```sh
+sh install.sh
+```
+
+…or update directly with git:
 
 ```sh
 cd ~/.claude/skills/prompt-optimizer && git pull
