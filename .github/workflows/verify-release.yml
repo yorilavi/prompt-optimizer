@@ -1,0 +1,66 @@
+name: Verify release version consistency
+
+# Runs when a vX.Y.Z tag is pushed. Confirms that SKILL.md's metadata.version
+# and CHANGELOG.md's section heading both line up with the tag name.
+# If they don't, the release page shows a red X — fix forward by deleting
+# the tag, correcting the files, and re-tagging.
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify tag aligns with SKILL.md and CHANGELOG.md
+        run: |
+          set -u
+          TAG="${GITHUB_REF#refs/tags/v}"
+          echo "Tag version: ${TAG}"
+
+          SKILL_VERSION="$(grep -E '^[[:space:]]+version:' SKILL.md | head -1 | awk -F: '{print $2}' | tr -d '[:space:]')"
+          echo "SKILL.md metadata.version: ${SKILL_VERSION:-(none found)}"
+
+          FAIL=0
+
+          if [ "${TAG}" != "${SKILL_VERSION}" ]; then
+            echo "::error file=SKILL.md::Tag is v${TAG} but SKILL.md metadata.version is '${SKILL_VERSION}'"
+            FAIL=1
+          fi
+
+          if ! grep -qE "^## ${TAG}([[:space:]]|$)" CHANGELOG.md; then
+            echo "::error file=CHANGELOG.md::CHANGELOG.md has no '## ${TAG}' section"
+            FAIL=1
+          fi
+
+          {
+            echo "## Release verification for \`v${TAG}\`"
+            echo ""
+            echo "| File | Expected | Found | Status |"
+            echo "|---|---|---|---|"
+            if [ "${TAG}" = "${SKILL_VERSION}" ]; then
+              echo "| \`SKILL.md\` metadata.version | ${TAG} | ${SKILL_VERSION} | match |"
+            else
+              echo "| \`SKILL.md\` metadata.version | ${TAG} | ${SKILL_VERSION:-_(missing)_} | **MISMATCH** |"
+            fi
+            if grep -qE "^## ${TAG}([[:space:]]|$)" CHANGELOG.md; then
+              echo "| \`CHANGELOG.md\` section | \`## ${TAG}\` | present | match |"
+            else
+              echo "| \`CHANGELOG.md\` section | \`## ${TAG}\` | _(missing)_ | **MISMATCH** |"
+            fi
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+          if [ "${FAIL}" = "1" ]; then
+            echo ""
+            echo "Release verification failed. To fix forward:"
+            echo "  1. Update SKILL.md / CHANGELOG.md to match the tag, or pick a different tag."
+            echo "  2. git tag -d v${TAG} && git push origin :refs/tags/v${TAG}"
+            echo "  3. Commit, retag, push."
+            exit 1
+          fi
+
+          echo "All checks passed."
