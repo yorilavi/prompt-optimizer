@@ -13,21 +13,48 @@ A skill for Claude Code that runs an iterative Claude ↔ GPT review loop on any
 
 ## Quick install (recommended)
 
-The install script handles three situations in one command. You don't have to know which one applies — it figures it out from what's on disk.
+Three paths. Pick whichever matches how you got here. All three end up at the same place: `~/.claude/skills/prompt-optimizer/` with `SKILL.md` and `CHANGELOG.md` in it.
 
-**macOS / Linux / WSL / Git Bash on Windows:**
+### 1. `git clone` — the most transparent path
+
+No script involved. The same command serves as the install, and `git pull` from inside the directory updates it later.
 
 ```sh
-sh install.sh
+# macOS / Linux / WSL / Git Bash on Windows
+git clone https://github.com/yorilavi/prompt-optimizer.git ~/.claude/skills/prompt-optimizer
 ```
-
-**Windows PowerShell:**
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\install.ps1
+# Windows PowerShell
+git clone https://github.com/yorilavi/prompt-optimizer.git "$env:USERPROFILE\.claude\skills\prompt-optimizer"
 ```
 
-**One-line remote install** (pipes the script directly from GitHub — convenient but a trust call; read it first if you'd rather):
+### 2. `install.sh` / `install.ps1` — one command that handles every install state
+
+Use this when you've already got the script locally — from an unzipped archive, a friend's forward, or a previous install you want to update. It auto-detects which mode applies.
+
+```sh
+sh install.sh                                                # macOS / Linux / WSL / Git Bash
+```
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\install.ps1       # Windows
+```
+
+How the script decides what to do:
+
+| Situation | What runs |
+|---|---|
+| Script sits next to a `SKILL.md` (you unzipped the archive) | **Local copy** — copies `SKILL.md` + `CHANGELOG.md` to the target. |
+| `~/.claude/skills/prompt-optimizer/.git` exists with the right remote | **Update** — runs `git pull --ff-only` in place. |
+| Neither of the above (forwarded script, `curl | sh`, fresh machine) | **Clone** — `git clone --depth 1` from GitHub into the target. |
+| `~/.claude/skills/prompt-optimizer/.git` exists but the remote is something else | **Refuses.** Won't touch a checkout it doesn't recognize. Move it aside and re-run. |
+
+Any pre-existing non-git install at the target is backed up to `prompt-optimizer.bak.<unix-timestamp>` before being replaced — no silent overwrites. Re-running the script is the canonical way to update.
+
+### 3. One-line remote install
+
+Pipes the script straight from GitHub. Convenient, but `curl | sh` is a trust call you should make consciously — read the script first if you're unsure.
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/yorilavi/prompt-optimizer/main/install.sh | sh
@@ -37,30 +64,30 @@ curl -fsSL https://raw.githubusercontent.com/yorilavi/prompt-optimizer/main/inst
 iwr -useb https://raw.githubusercontent.com/yorilavi/prompt-optimizer/main/install.ps1 | iex
 ```
 
-Skip to [Verify the install](#verify-the-install) once you've run one.
-
-### How the script decides what to do
-
-| Situation | What runs |
-|---|---|
-| Script sits next to a `SKILL.md` (you unzipped the archive) | **Local copy** — copies `SKILL.md` + `CHANGELOG.md` to the target. |
-| `~/.claude/skills/prompt-optimizer/.git` exists with the right remote | **Update** — runs `git pull --ff-only` in place. |
-| Neither of the above (forwarded script, `curl | sh`, fresh machine) | **Clone** — `git clone --depth 1` from GitHub into the target. |
-| `~/.claude/skills/prompt-optimizer/.git` exists but the remote is something else | **Refuses.** Won't touch a checkout it doesn't recognize. Move it aside and re-run. |
-
-Any pre-existing non-git install at the target is backed up to `prompt-optimizer.bak.<unix-timestamp>` before being replaced — no silent overwrites.
-
-Re-running the script is the canonical way to update. You don't need to remember which mode you used the first time.
+Skip to [Verify the install](#verify-the-install) once any of these finishes.
 
 ---
 
-## Manual install
+## Manual install (from a zip)
 
-If you'd rather see exactly what's happening, do it by hand. The skill lives in a single directory under `~/.claude/skills/`.
+Use this path if you've been sent a zip and want to copy the files into place by hand instead of running a script.
+
+> If you don't have a zip but you do have git, the `git clone` option in [Quick install](#1-git-clone--the-most-transparent-path) is simpler — one command, no manual file moving, and `git pull` updates you later.
+
+### Step 0 — get the files
+
+You need an unzipped copy of the skill on disk before any of the commands below will work.
+
+- **Official zip:** grab "Source code (zip)" from the [latest release page](https://github.com/yorilavi/prompt-optimizer/releases/latest).
+  Direct link to the current release archive: <https://github.com/yorilavi/prompt-optimizer/archive/refs/tags/v1.0.1.zip>
+- **From a friend:** use whichever zip they sent.
+
+Unzip it. GitHub's release archive extracts to a folder named `prompt-optimizer-1.0.1/` (with the version suffix). A friend's zip might extract to `prompt-optimizer/`. **The folder you place under `~/.claude/skills/` must be named exactly `prompt-optimizer/`** — rename or `cp` accordingly. The commands below assume that.
 
 ### macOS / Linux
 
 ```sh
+# From the directory that contains the unzipped folder:
 mkdir -p ~/.claude/skills
 cp -r prompt-optimizer ~/.claude/skills/
 ```
@@ -77,6 +104,7 @@ If you end up with `~/.claude/skills/prompt-optimizer/prompt-optimizer/SKILL.md`
 ### Windows
 
 ```powershell
+# From the directory that contains the unzipped folder:
 $dest = "$env:USERPROFILE\.claude\skills"
 New-Item -ItemType Directory -Path $dest -Force | Out-Null
 Copy-Item -Recurse -Path .\prompt-optimizer -Destination $dest
