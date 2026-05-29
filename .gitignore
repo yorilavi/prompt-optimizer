@@ -1,0 +1,16 @@
+# Install backups created by install.sh / install.ps1
+*.bak.*
+
+# macOS
+.DS_Store
+
+# Editor metadata
+.vscode/
+.idea/
+*.swp
+*~
+
+# Runtime artifacts the skill produces in a working directory
+# (these only appear if the skill is RUN from inside this folder, not normal)
+prompt-evolution-*.md
+optimized-prompt/
