@@ -8,6 +8,7 @@ Versioning follows [Semantic Versioning](https://semver.org/):
 
 ### Fixed
 - Step 6 (Final Artifacts) copied the final prompt from `/tmp/final-prompt.md`, a file no earlier step ever created. It now writes `./optimized-prompt/final-prompt.md` directly via a quoted heredoc. The option to use a descriptive filename instead is unchanged.
+- `install.sh` local-copy mode exited 1 (after copying `SKILL.md` but before printing the success message) when `CHANGELOG.md` wasn't beside the script — the forwarded-script case. The `CHANGELOG.md` copy is now properly optional, matching `install.ps1`.
 
 ### Changed
 - SKILL.md description and intro now say "Codex CLI" instead of "Codex plugin", matching README/INSTALL and the actual `codex exec` dependency. There is no dependency on any Claude Code plugin.
