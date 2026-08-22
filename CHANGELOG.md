@@ -4,7 +4,7 @@ All notable changes to the `prompt-optimizer` skill.
 Versioning follows [Semantic Versioning](https://semver.org/):
 **MAJOR** = breaking workflow change · **MINOR** = new capability · **PATCH** = fix or clarification.
 
-## Unreleased
+## 1.0.2 — 2026-08-22
 
 ### Fixed
 - Step 6 (Final Artifacts) copied the final prompt from `/tmp/final-prompt.md`, a file no earlier step ever created. It now writes `./optimized-prompt/final-prompt.md` directly via a quoted heredoc. The option to use a descriptive filename instead is unchanged.

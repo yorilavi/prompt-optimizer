@@ -79,7 +79,7 @@ Use this path if you've been sent a zip and want to copy the files into place by
 You need an unzipped copy of the skill on disk before any of the commands below will work.
 
 - **Official zip:** grab "Source code (zip)" from the [latest release page](https://github.com/yorilavi/prompt-optimizer/releases/latest).
-  Direct link to the current release archive: <https://github.com/yorilavi/prompt-optimizer/archive/refs/tags/v1.0.1.zip>
+  Direct link to the current release archive: <https://github.com/yorilavi/prompt-optimizer/archive/refs/tags/v1.0.2.zip>
 - **From a friend:** use whichever zip they sent.
 
 Unzip it. GitHub's release archive extracts to a folder named `prompt-optimizer-1.0.1/` (with the version suffix). A friend's zip might extract to `prompt-optimizer/`. **The folder you place under `~/.claude/skills/` must be named exactly `prompt-optimizer/`** — rename or `cp` accordingly. The commands below assume that.
