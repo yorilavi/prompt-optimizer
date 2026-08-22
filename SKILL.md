@@ -1,6 +1,6 @@
 ---
 name: prompt-optimizer
-description: Optimizes prompts through an iterative Claude-GPT review process. Use when the user wants to optimize, improve, or refine a prompt. Supports automated review via Codex plugin or manual GPT handoff.
+description: Optimizes prompts through an iterative Claude-GPT review process. Use when the user wants to optimize, improve, or refine a prompt. Supports automated review via the Codex CLI or manual GPT handoff.
 metadata:
   version: 1.0.1
   author: Yori Lavi
@@ -11,7 +11,7 @@ metadata:
 > **v1.0.1** · by Yori Lavi · updated 2026-05-29 · see [CHANGELOG](./CHANGELOG.md)
 > Requires: Claude Code · Optional: [Codex CLI](https://github.com/openai/codex) for automated GPT review
 
-This skill guides an iterative prompt optimization process using both Claude and GPT as reviewers. When the Codex plugin is available, the GPT review step runs automatically — no manual copy-paste needed.
+This skill guides an iterative prompt optimization process using both Claude and GPT as reviewers. When the Codex CLI is available, the GPT review step runs automatically — no manual copy-paste needed.
 
 ## Prerequisites Check
 
@@ -179,11 +179,13 @@ If no, proceed to the Final Artifacts step.
 
 When the user chooses to finalize, produce **two files** (not just the evolution log):
 
-1. **The final prompt** as a standalone file, ready to copy-paste into a fresh session:
+1. **The final prompt** as a standalone file, ready to copy-paste into a fresh session. Write it directly — use a quoted heredoc so nothing inside the prompt gets shell-expanded:
 
 ```bash
 mkdir -p ./optimized-prompt
-cp /tmp/final-prompt.md ./optimized-prompt/final-prompt.md
+cat > ./optimized-prompt/final-prompt.md <<'PROMPT_EOF'
+[the final optimized prompt text, verbatim]
+PROMPT_EOF
 ```
 
 (Or name it descriptively based on the prompt's purpose, e.g., `./optimized-prompt/marketing-campaign-prompt.md`.)

@@ -4,6 +4,14 @@ All notable changes to the `prompt-optimizer` skill.
 Versioning follows [Semantic Versioning](https://semver.org/):
 **MAJOR** = breaking workflow change · **MINOR** = new capability · **PATCH** = fix or clarification.
 
+## Unreleased
+
+### Fixed
+- Step 6 (Final Artifacts) copied the final prompt from `/tmp/final-prompt.md`, a file no earlier step ever created. It now writes `./optimized-prompt/final-prompt.md` directly via a quoted heredoc. The option to use a descriptive filename instead is unchanged.
+
+### Changed
+- SKILL.md description and intro now say "Codex CLI" instead of "Codex plugin", matching README/INSTALL and the actual `codex exec` dependency. There is no dependency on any Claude Code plugin.
+
 ## 1.0.1 — 2026-05-29
 
 Tooling-only patch release. The skill's behavior is unchanged — only the install ergonomics differ. No need to re-clone unless you want the smarter installer.
